@@ -1,56 +1,229 @@
+import json
+import tkinter
 from tkinter import *
-window = Tk()
-window.geometry("600x900+0+0")
-window['bg'] = "red"
-window.title("Pizza Hut")
-label10=Label(window,text="PIZZA HUT",font="times 30 bold",bg='red')
-label10.grid(row=0, column=100)
-#---------------------MENU SECTION-------------
+import random
 
-label1=Label(window,text="--------------------------MENU--------------------------",font="times 20 bold",bg='red')
-label1.grid(row=5, column=100)
+# load questions and answer choices from json file instead of the file
+with open('./data.json', encoding="utf8") as f:
+    data = json.load(f)
 
-label2=Label(window,text="Triple chicken feast-MED pizza ----------------Rs 1345",font="times 19 italic",bg='red')
-label2.grid(row=6, column=100)
-label3=Label(window,text="Chicken Tikka pizza ------------------------------Rs 1245",font="times 19 italic italic",anchor="e",bg='red')
-label3.grid(row=7, column=100)
-label4=Label(window,text="Chicken Supreme-MED pizza ------------------Rs 1345",font="times 19 italic",bg='red')
-label4.grid(row=8, column=100)
-label5=Label(window,text="Malai Chicken Tikka -MED --------------------Rs 1245",font="times 19 italic",bg='red')
-label5.grid(row=9, column=100)
-label6=Label(window,text="Italian Chicken Feast-MED pizza-------------Rs 1245",font="times 19 italic",bg='red')
-label6.grid(row=10, column=100)
-label7=Label(window,text="Chicken Pepper Crunch pizza ----------------Rs 1245",font="times 19 italic",bg='red')
-label7.grid(row=11, column=100)
-label8=Label(window,text="Pepsi---------------------------------------------Rs 70",font="times 19 italic",bg='red')
-label8.grid(row=12, column=100)
-label9=Label(window,text="Dessert-choco Volcano-----------------------------Rs 299",font="times 19 italic",bg='red')
-label9.grid(row=13, column=100)
-label10=Label(window,text="------------------------------------------------------------",font="times 20 bold",bg='red')
-label10.grid(row=13, column=100)
-#--------------------Billing section----------------------------
-label11=Label(window,text="SELECT YOUR CHOICE",font="times 20 bold",bg='red')
-label11.grid(row=14, column=100)
-label12=Label(window,text="Triple chicken feast-MED pizza",font="times 19 italic",bg='red')
-label12.grid(row=15,column=100)
-label13=Label(window,text="Chicken Tikka pizza",font="times 19 italic",bg='red')
-label13.grid(row=17, column=100)
-label14=Label(window,text="Chicken Supreme-MED pizza",font="times 19 italic",bg='red')
-label14.grid(row=19, column=100)
-label15=Label(window,text="Malai Chicken Tikka -MED ",font="times 19 italic",bg='red')
-label15.grid(row=21, column=100)
-label16=Label(window,text="Italian Chicken Feast-MED pizza",font="times 19 italic",bg='red')
-label16.grid(row=23, column=100)
-label17=Label(window,text="Chicken Pepper Crunch pizza",font="times 19 italic",bg='red')
-label17.grid(row=25, column=100)
-label18=Label(window,text="Pepsi",font="times 19 italic",bg='red')
-label18.grid(row=21, column=100)
-label19=Label(window,text="Dessert-choco Volcano",font="times 19 italic",bg='red')
-label19.grid(row=22, column=100)
+# convert the dictionary in lists of questions and answers_choice
+questions = [v for v in data[0].values()]
+answers_choice = [v for v in data[1].values()]
 
-window.mainloop()
+answers = [1, 1, 1, 1, 3, 1, 0, 1, 3, 3]
+
+user_answer = []
+
+indexes = []
 
 
+def gen():
+    global indexes
+    while (len(indexes) < 5):
+        x = random.randint(0, 9)
+        if x in indexes:
+            continue
+        else:
+            indexes.append(x)
 
 
+def showresult(score):
+    lblQuestion.destroy()
+    r1.destroy()
+    r2.destroy()
+    r3.destroy()
+    r4.destroy()
+    labelimage = Label(
+        root,
+        background="#ffffff",
+        border=0,
+    )
+    labelimage.pack(pady=(50, 30))
+    labelresulttext = Label(
+        root,
+        font=("Consolas", 20),
+        background="#ffffff",
+    )
+    labelresulttext.pack()
+    if score >= 20:
+        img = PhotoImage(file="great.png")
+        labelimage.configure(image=img)
+        labelimage.image = img
+        labelresulttext.configure(text="You Are Excellent !!")
+    elif (score >= 10 and score < 20):
+        img = PhotoImage(file="ok.png")
+        labelimage.configure(image=img)
+        labelimage.image = img
+        labelresulttext.configure(text="You Can Be Better !!")
+    else:
+        img = PhotoImage(file="bad.png")
+        labelimage.configure(image=img)
+        labelimage.image = img
+        labelresulttext.configure(text="You Should Work Hard !!")
 
+
+def calc():
+    global indexes, user_answer, answers
+    x = 0
+    score = 0
+    for i in indexes:
+        if user_answer[x] == answers[i]:
+            score = score + 5
+        x += 1
+    print(score)
+    showresult(score)
+
+
+ques = 1
+
+
+def selected():
+    global radiovar, user_answer
+    global lblQuestion, r1, r2, r3, r4
+    global ques
+    x = radiovar.get()
+    user_answer.append(x)
+    radiovar.set(-1)
+    if ques < 5:
+        lblQuestion.config(text=questions[indexes[ques]])
+        r1['text'] = answers_choice[indexes[ques]][0]
+        r2['text'] = answers_choice[indexes[ques]][1]
+        r3['text'] = answers_choice[indexes[ques]][2]
+        r4['text'] = answers_choice[indexes[ques]][3]
+        ques += 1
+    else:
+        # print(indexes)
+        # print(user_answer)
+        # these two lines were just developement code
+        # we don't need them
+        calc()
+
+
+def startquiz():
+    global lblQuestion, r1, r2, r3, r4
+    lblQuestion = Label(
+        root,
+        text=questions[indexes[0]],
+        font=("Consolas", 16),
+        width=500,
+        justify="center",
+        wraplength=400,
+        background="#ffffff",
+    )
+    lblQuestion.pack(pady=(100, 30))
+
+    global radiovar
+    radiovar = IntVar()
+    radiovar.set(-1)
+
+    r1 = Radiobutton(
+        root,
+        text=answers_choice[indexes[0]][0],
+        font=("Times", 12),
+        value=0,
+        variable=radiovar,
+        command=selected,
+        background="#ffffff",
+    )
+    r1.pack(pady=5)
+
+    r2 = Radiobutton(
+        root,
+        text=answers_choice[indexes[0]][1],
+        font=("Times", 12),
+        value=1,
+        variable=radiovar,
+        command=selected,
+        background="#ffffff",
+    )
+    r2.pack(pady=5)
+
+    r3 = Radiobutton(
+        root,
+        text=answers_choice[indexes[0]][2],
+        font=("Times", 12),
+        value=2,
+        variable=radiovar,
+        command=selected,
+        background="#ffffff",
+    )
+    r3.pack(pady=5)
+
+    r4 = Radiobutton(
+        root,
+        text=answers_choice[indexes[0]][3],
+        font=("Times", 12),
+        value=3,
+        variable=radiovar,
+        command=selected,
+        background="#ffffff",
+    )
+    r4.pack(pady=5)
+
+
+def startIspressed():
+    labelimage.destroy()
+    labeltext.destroy()
+    lblInstruction.destroy()
+    lblRules.destroy()
+    btnStart.destroy()
+    gen()
+    startquiz()
+
+
+root = tkinter.Tk()
+root.title("Nepal Quitch Compitition")
+root.geometry("700x600")
+root.config(background="#ffffff")
+root.resizable(0, 0)
+
+img1 = PhotoImage(file="transparentGradHat.png")
+
+labelimage = Label(
+    root,
+    image=img1,
+    background="#ffffff",
+)
+labelimage.pack(pady=(40, 0))
+
+labeltext = Label(
+    root,
+    text="Quizstar",
+    font=("Comic sans MS", 24, "bold"),
+    background="#ffffff",
+)
+labeltext.pack(pady=(0, 50))
+
+img2 = PhotoImage(file="Frame.png")
+
+btnStart = Button(
+    root,
+    image=img2,
+    relief=FLAT,
+    border=0,
+    command=startIspressed,
+)
+btnStart.pack()
+
+lblInstruction = Label(
+    root,
+    text="Click Start if You Are ready",
+    background="#ffffff",
+    font=("Consolas", 14),
+    justify="center",
+)
+lblInstruction.pack(pady=(10, 100))
+
+lblRules = Label(
+    root,
+    text="You will get 20 seconds to solve 10 question so, think before you choose",
+    width=100,
+    font=("Times", 12),
+    background="#000000"
+               "",
+    foreground="#FACA2F",
+)
+lblRules.pack()
+
+root.mainloop()
