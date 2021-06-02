@@ -2,8 +2,6 @@ import json
 import tkinter
 from tkinter import *
 import random
-
-# load questions and answer choices from json file instead of the file
 with open('./data.json', encoding="utf8") as f:
     data = json.load(f)
 
@@ -16,6 +14,8 @@ answers = [1, 1, 1, 1, 3, 1, 0, 1, 3, 3]
 user_answer = []
 
 indexes = []
+
+
 
 
 def gen():
@@ -65,6 +65,7 @@ def showresult(score):
 
 def calc():
     global indexes, user_answer, answers
+    f = open("score.txt", "a")
     x = 0
     score = 0
     for i in indexes:
@@ -73,9 +74,15 @@ def calc():
         x += 1
     print(score)
     showresult(score)
+    f.writelines('\n')
+    f.writelines('YOUR SCORE:-')
+    f.write(str(score))
+    f.close()
 
 
 ques = 1
+
+
 
 
 def selected():
@@ -172,12 +179,12 @@ def startIspressed():
     startquiz()
 
 
-root = tkinter.Tk()
-root.title("Nepal Quitch Compitition")
-root.geometry("700x600")
-root.config(background="#ffffff")
-root.resizable(0, 0)
 
+root = tkinter.Tk()
+root.title("Nepal Quiz Compitition")
+root.geometry("700x600")
+root.config(background="Slate gray")
+root.resizable(0, 0)
 img1 = PhotoImage(file="transparentGradHat.png")
 
 labelimage = Label(
@@ -191,9 +198,11 @@ labeltext = Label(
     root,
     text="Quizstar",
     font=("Comic sans MS", 24, "bold"),
-    background="#ffffff",
+    background="Slate gray",
 )
+
 labeltext.pack(pady=(0, 50))
+
 
 img2 = PhotoImage(file="Frame.png")
 
@@ -209,7 +218,7 @@ btnStart.pack()
 lblInstruction = Label(
     root,
     text="Click Start if You Are ready",
-    background="#ffffff",
+    background="Slate gray",
     font=("Consolas", 14),
     justify="center",
 )
@@ -220,7 +229,7 @@ lblRules = Label(
     text="You will get 20 seconds to solve 10 question so, think before you choose",
     width=100,
     font=("Times", 12),
-    background="#000000"
+    background="purple"
                "",
     foreground="#FACA2F",
 )
