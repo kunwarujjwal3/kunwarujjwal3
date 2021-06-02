@@ -36,31 +36,31 @@ def showresult(score):
     r4.destroy()
     labelimage = Label(
         root,
-        background="#ffffff",
+        background="Slate gray",
         border=0,
     )
     labelimage.pack(pady=(50, 30))
     labelresulttext = Label(
         root,
         font=("Consolas", 20),
-        background="#ffffff",
+        background="Slate gray",
     )
     labelresulttext.pack()
     if score >= 20:
         img = PhotoImage(file="great.png")
         labelimage.configure(image=img)
         labelimage.image = img
-        labelresulttext.configure(text="You Are Excellent !!")
+        labelresulttext.configure(text="Awesome!! Outstanding!!")
     elif (score >= 10 and score < 20):
         img = PhotoImage(file="ok.png")
         labelimage.configure(image=img)
         labelimage.image = img
-        labelresulttext.configure(text="You Can Be Better !!")
+        labelresulttext.configure(text="You Can Be Better, Good work!!")
     else:
         img = PhotoImage(file="bad.png")
         labelimage.configure(image=img)
         labelimage.image = img
-        labelresulttext.configure(text="You Should Work Hard !!")
+        labelresulttext.configure(text="Better luck next time !!")
 
 
 def calc():
@@ -75,7 +75,7 @@ def calc():
     print(score)
     showresult(score)
     f.writelines('\n')
-    f.writelines('YOUR SCORE:-')
+    f.writelines('YOUR SCORE IS:-')
     f.write(str(score))
     f.close()
 
@@ -100,10 +100,7 @@ def selected():
         r4['text'] = answers_choice[indexes[ques]][3]
         ques += 1
     else:
-        # print(indexes)
-        # print(user_answer)
-        # these two lines were just developement code
-        # we don't need them
+
         calc()
 
 
@@ -116,7 +113,7 @@ def startquiz():
         width=500,
         justify="center",
         wraplength=400,
-        background="#ffffff",
+        background="Slate gray",
     )
     lblQuestion.pack(pady=(100, 30))
 
@@ -131,7 +128,7 @@ def startquiz():
         value=0,
         variable=radiovar,
         command=selected,
-        background="#ffffff",
+        background="Slate gray",
     )
     r1.pack(pady=5)
 
@@ -142,7 +139,7 @@ def startquiz():
         value=1,
         variable=radiovar,
         command=selected,
-        background="#ffffff",
+        background="Slate gray",
     )
     r2.pack(pady=5)
 
@@ -153,7 +150,7 @@ def startquiz():
         value=2,
         variable=radiovar,
         command=selected,
-        background="#ffffff",
+        background="Slate gray",
     )
     r3.pack(pady=5)
 
@@ -164,7 +161,7 @@ def startquiz():
         value=3,
         variable=radiovar,
         command=selected,
-        background="#ffffff",
+        background="Slate gray",
     )
     r4.pack(pady=5)
 
@@ -190,13 +187,21 @@ img1 = PhotoImage(file="transparentGradHat.png")
 labelimage = Label(
     root,
     image=img1,
-    background="#ffffff",
+    background="Slate gray",
 )
 labelimage.pack(pady=(40, 0))
 
 labeltext = Label(
     root,
-    text="Quizstar",
+    text="Quiz super star",
+    font=("Comic sans MS", 24, "bold"),
+    background="Slate gray",
+)
+labelimage.pack(pady=(50, 0))
+
+labeltext = Label(
+    root,
+    text="Quiz Competition",
     font=("Comic sans MS", 24, "bold"),
     background="Slate gray",
 )
@@ -235,4 +240,10 @@ lblRules = Label(
 )
 lblRules.pack()
 
+
+
+# Create an Exit  Button
+Exitbtn = Button(root, text='EXIT', bg='silver', fg='black',
+                 command=root.destroy)
+Exitbtn.pack(side='bottom')
 root.mainloop()
